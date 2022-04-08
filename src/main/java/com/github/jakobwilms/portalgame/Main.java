@@ -1,7 +1,6 @@
 package com.github.jakobwilms.portalgame;
 
 import javafx.application.Application;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +23,9 @@ public class Main extends Application {
         stage.setResizable(false);
         stage.initStyle(StageStyle.DECORATED);
         stage.setFullScreenExitHint("");
-        //stage.getIcons().add(SwingFXUtils.toFXImage(Textures.Example.getImage(), null));
+        stage.show();
+
+        GameScreen gameScreen = new GameScreen(stage);
     }
 
     @Override

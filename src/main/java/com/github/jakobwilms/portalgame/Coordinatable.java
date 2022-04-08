@@ -1,29 +1,51 @@
 package com.github.jakobwilms.portalgame;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.image.BufferedImage;
+public class Coordinatable {
 
-public abstract class Coordinatable {
+    protected final Texture texture;
 
-    protected final BufferedImage image;
+    private int x;
+    private int y;
+    private int transitionX;
+    private int transitionY;
 
-    protected int x;
-    protected int y;
-
-    public Coordinatable(int x, int y, BufferedImage image) {
+    public Coordinatable(int x, int y, @NotNull String texture) {
+        this.texture = Texture.get(texture);
         this.x = x;
         this.y = y;
-        this.image = image;
+        this.transitionX = 0;
+        this.transitionY = 0;
     }
 
-    public Coordinatable(int x, int y, @NotNull Textures textures) {
-        this(x, y, textures.getImage());
+    @Contract(pure = true)
+    public Coordinatable(@NotNull Coordinatable copy) {
+        this.x = copy.x;
+        this.y = copy.y;
+        this.transitionX = copy.transitionX;
+        this.transitionY = copy.transitionY;
+        this.texture = copy.texture;
+    }
+
+    public ImmutableCoordinatable immutable() {
+        return new ImmutableCoordinatable(this);
+    }
+
+    public Coordinatable mutable() {
+        return new Coordinatable(this);
     }
 
     public void setPos(int x, int y) {
+        setPos(x, y, 0, 0);
+    }
+
+    public void setPos(int x, int y, int transitionX, int transitionY) {
         setX(x);
         setY(y);
+        setTransitionX(transitionX);
+        setTransitionY(transitionY);
     }
 
     public boolean posEquals(Coordinatable other) {
@@ -33,8 +55,8 @@ public abstract class Coordinatable {
         return other.getX() == this.getX() && other.getY() == this.getY();
     }
 
-    public BufferedImage getImage() {
-        return image;
+    public Texture getTexture() {
+        return texture;
     }
 
     public int getX() {
@@ -53,5 +75,29 @@ public abstract class Coordinatable {
         this.y = y;
     }
 
+    public int getTransitionX() {
+        return transitionX;
+    }
 
+    public void setTransitionX(int transitionX) {
+        this.transitionX = transitionX;
+    }
+
+    public void addTransitionX() {
+        if (getTransitionX() + 1 >= Game.TRANSITION_MOVES) setTransitionX(0);
+        else setTransitionX(getTransitionX() + 1);
+    }
+
+    public int getTransitionY() {
+        return transitionY;
+    }
+
+    public void setTransitionY(int transitionY) {
+        this.transitionY = transitionY;
+    }
+
+    public void addTransitionY() {
+        if (getTransitionY() + 1 >= Game.TRANSITION_MOVES) setTransitionY(0);
+        else setTransitionY(getTransitionY() + 1);
+    }
 }

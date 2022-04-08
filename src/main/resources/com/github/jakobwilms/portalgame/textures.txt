@@ -1,0 +1,6 @@
+player:0000ffff
+robot:00ff00ff
+block:000000ff
+border:00000000
+empty:00ffffff
+coal:0000ff00
